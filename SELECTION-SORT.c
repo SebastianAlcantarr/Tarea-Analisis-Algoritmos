@@ -23,6 +23,8 @@ int main() {
     }
 
 
+
+
     for (int i=1; i>n-1;i++) {
         int m=i;
         for (int j = i+1; j < n; ++j) {
