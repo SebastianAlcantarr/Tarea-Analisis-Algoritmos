@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <time.h>
 
 int funcion_merge(int arr[],int inicio,int medio,int fin) {
     int n1 = medio - inicio + 1;
@@ -46,58 +46,78 @@ int funcion_merge(int arr[],int inicio,int medio,int fin) {
 }
 
 
-int merge_sort(int arr[],int inicio,int final) {
-    if (inicio>final) {
-        int enmedio=(inicio+final)/2;
-        merge_sort(arr,inicio,final);
-        merge_sort(arr,enmedio +1,final);
-        funcion_merge(arr,inicio,enmedio,final);
+int merge_sort(int arr[], int inicio, int final, int n, int es_primera_llamada) {
+
+    if (es_primera_llamada) {
+        printf("\n\n---- PRUEBA DE MERGE SORT CON N=%d ------", n);
+        printf("\nArreglo Desordenado: [ ");
+
+        for (int i = 0; i < n; i++) {
+            if (i < n - 1)
+                printf("%d, ", arr[i]);
+            else
+                printf("%d ]", arr[i]);
+        }
+
+        clock_t start = clock();
+
+        if (inicio < final) {
+            int enmedio = (inicio + final) / 2;
+            merge_sort(arr, inicio, enmedio, n, 0);
+            merge_sort(arr, enmedio + 1, final, n, 0);
+            funcion_merge(arr, inicio, enmedio, final);
+        }
+
+        clock_t fin = clock();
+
+        double tiempo = (double)(fin - start) / CLOCKS_PER_SEC;
+
+        printf("\nArreglo ordenado: [ ");
+        for (int i = 0; i < n; i++) {
+            if (i < n - 1)
+                printf("%d, ", arr[i]);
+            else
+                printf("%d]", arr[i]);
+        }
+
+        printf("\nTiempo de ejecucion: %f segundos\n", tiempo);
+    } else {
+        if (inicio < final) {
+            int enmedio = (inicio + final) / 2;
+            merge_sort(arr, inicio, enmedio, n, 0);
+            merge_sort(arr, enmedio + 1, final, n, 0);
+            funcion_merge(arr, inicio, enmedio, final);
+        }
     }
+
     return 0;
 }
 
-
-
-
-
-
 int main() {
-    int n;
+    int arrays[][40] = {
+        {9, 10},
+        {5, 3, 8, 1},
+        {7, 2, 4, 6, 9, 120},
+        {15, 42, 7, 33, 21, 8, 3, 99, 14, 56},
+        {88, 23, 45, 12, 67, 34, 9, 76, 51, 28, 63, 17},
+        {4, 19, 72, 38, 55, 91, 26, 83, 47, 62, 11, 35, 78, 29, 6, 94},
+        {50, 13, 87, 41, 68, 25, 59, 36, 74, 18, 93, 44, 7, 82, 31, 66, 48, 20},
+        {37, 84, 16, 71, 52, 29, 95, 43, 8, 67, 24, 79, 11, 58, 33, 86, 49, 22, 75, 40},
+        {60, 17, 89, 34, 73, 28, 96, 45, 12, 81, 39, 64, 21, 57, 86, 32, 70, 15, 44, 98,
+         27, 53, 9, 78, 42, 65, 19, 88, 36, 74},
+        {55, 31, 76, 14, 92, 48, 23, 67, 39, 84, 7, 61, 28, 95, 43, 18, 72, 37, 80, 25,
+         59, 46, 13, 90, 35, 68, 22, 85, 41, 77, 16, 63, 30, 97, 52, 8, 71, 44, 26, 83}
+    };
 
-    printf("De cuantos elementos tu lista a ordenar:");
+    int sizes[] = {2, 4, 6, 10, 12, 16, 18, 20, 30, 40};
+    int num_arrays = sizeof(arrays) / sizeof(arrays[0]);
 
-    scanf("%d",&n);
-
-
-    int arreglo[n];
-
-    for (int i = 0; i < n; ++i) {
-        int numero;
-        printf("Ingresa el elemento numero: %d ",i );
-        scanf("%d",&numero);
-        arreglo[i]=numero;
+    for (int i = 0; i < num_arrays; i++) {
+        merge_sort(arrays[i], 0, sizes[i] - 1, sizes[i], 1);
     }
 
-    printf("Lista antes de usar SELECTION-SORT\n");
-
-    for (int i = 0; i < n; ++i) {
-        printf(" %d" ,arreglo[i]);
-    }
-
-
-    merge_sort(arreglo,arreglo[0],arreglo[n]);
-
-
-
-    printf("\n Lista despues de usar SELECTION-SORT\n");
-
-    for (int i = 0; i < n; ++i) {
-        printf(" %d" ,arreglo[i]);
-    }
+    return 0;
 }
-
-
-
 
 
 
